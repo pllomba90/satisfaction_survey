@@ -19,3 +19,17 @@ def survey_home():
 def survey_start():
     session[RESPONSES_KEY] = []
     return redirect('/questions/0')
+
+@app.route('/answer', methods=['POST'])
+def handle_question():
+    choice = request.form['answer']
+
+    responses = session[RESPONSES_KEY]
+    responses.append(choice)
+    session[RESPONSES_KEY] = responses
+
+    if (len(responses) == len(survey.questions)):
+        return redirect('/complete')
+    else:
+        return redirect(f"/questions/{len(responses)}")
+
